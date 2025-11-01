@@ -15,6 +15,7 @@ export default function Register() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleChange = (key, value) => setForm((s) => ({ ...s, [key]: value }));
 
@@ -22,14 +23,38 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setFieldErrors({});
     try {
       await register(form);
       // navigate to login so user can sign in
       navigate('/login');
     } catch (err) {
       console.error(err);
-      const msg = err?.response?.data?.detail || err?.message || 'Registration failed';
-      setError(msg);
+      const resp = err?.response?.data;
+      // DRF validation errors are often an object mapping field -> [errors]
+      if (resp && typeof resp === 'object') {
+        // collect non-field errors
+        const nonField = resp.non_field_errors || resp.detail;
+        if (nonField) {
+          setError(Array.isArray(nonField) ? nonField.join(' ') : String(nonField));
+        }
+
+        // map field errors to single strings
+        const fErrs = {};
+        Object.keys(resp).forEach((k) => {
+          if (k === 'non_field_errors' || k === 'detail') return;
+          const val = resp[k];
+          if (Array.isArray(val)) fErrs[k] = val.join(' ');
+          else fErrs[k] = String(val);
+        });
+        setFieldErrors(fErrs);
+        if (!nonField && Object.keys(fErrs).length === 0) {
+          setError('Registration failed');
+        }
+      } else {
+        const msg = err?.message || 'Registration failed';
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -52,21 +77,25 @@ export default function Register() {
             <div className="form-row">
               <label className="form-label" htmlFor="reg-username">Username</label>
               <input id="reg-username" className="form-input" value={form.username} onChange={(e) => handleChange('username', e.target.value)} placeholder="Choose a username" />
+              {fieldErrors.username && <div className="form-help" style={{ color: '#9f3a38' }}>{fieldErrors.username}</div>}
             </div>
 
             <div className="form-row">
               <label className="form-label" htmlFor="reg-email">Email</label>
               <input id="reg-email" className="form-input" value={form.email} onChange={(e) => handleChange('email', e.target.value)} placeholder="you@example.com" />
+              {fieldErrors.email && <div className="form-help" style={{ color: '#9f3a38' }}>{fieldErrors.email}</div>}
             </div>
 
             <div className="form-row">
               <label className="form-label" htmlFor="reg-first">First name</label>
               <input id="reg-first" className="form-input" value={form.first_name} onChange={(e) => handleChange('first_name', e.target.value)} placeholder="First name" />
+              {fieldErrors.first_name && <div className="form-help" style={{ color: '#9f3a38' }}>{fieldErrors.first_name}</div>}
             </div>
 
             <div className="form-row">
               <label className="form-label" htmlFor="reg-last">Last name</label>
               <input id="reg-last" className="form-input" value={form.last_name} onChange={(e) => handleChange('last_name', e.target.value)} placeholder="Last name" />
+              {fieldErrors.last_name && <div className="form-help" style={{ color: '#9f3a38' }}>{fieldErrors.last_name}</div>}
             </div>
 
             <div className="form-row">
@@ -76,11 +105,13 @@ export default function Register() {
                 <option value="teacher">Teacher</option>
                 <option value="staff">Staff</option>
               </select>
+              {fieldErrors.role && <div className="form-help" style={{ color: '#9f3a38' }}>{fieldErrors.role}</div>}
             </div>
 
             <div className="form-row">
               <label className="form-label" htmlFor="reg-password">Password</label>
               <input id="reg-password" className="form-input" type="password" value={form.password} onChange={(e) => handleChange('password', e.target.value)} placeholder="Create a password" />
+              {fieldErrors.password && <div className="form-help" style={{ color: '#9f3a38' }}>{fieldErrors.password}</div>}
             </div>
 
             <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '0.6rem', marginTop: '0.25rem' }}>
