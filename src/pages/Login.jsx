@@ -28,27 +28,31 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow w-80">
-        <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
-        {error && <div className="text-red-600 mb-3">{error}</div>}
-        <input
-          className="border p-2 w-full mb-3"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="border p-2 w-full mb-3"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button disabled={loading} className="bg-blue-500 text-white w-full py-2 rounded">
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+    <div className="app-container" style={{ maxWidth: 480, marginTop: '3rem' }}>
+      <section className="site-card" style={{ textAlign: 'center' }}>
+        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>Sign in to your account</h2>
+        {error && <div style={{ color: '#d03a3a', marginBottom: '0.75rem' }}>{error}</div>}
+
+        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '0.75rem' }}>
+          <input
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ padding: '0.6rem 0.75rem', borderRadius: 8, border: '1px solid #e6e9ee' }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ padding: '0.6rem 0.75rem', borderRadius: 8, border: '1px solid #e6e9ee' }}
+          />
+
+          <button disabled={loading} style={{ background: '#0b63ff', color: 'white', padding: '0.6rem', borderRadius: 8, border: 'none' }}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+      </section>
     </div>
   );
 }

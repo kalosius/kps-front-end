@@ -8,10 +8,14 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">Welcome, {user?.first_name || user?.username}!</h1>
-        <p className="mt-2 text-gray-600">You are logged in as {user?.role}.</p>
-      </div>
+      <main className="content-area">
+        <div className="app-container">
+          <div className="site-card">
+            <h1 className="text-2xl font-bold">Welcome, {user?.first_name || user?.username}!</h1>
+            <p className="mt-2 text-gray-600">You are logged in as {user?.role}.</p>
+          </div>
+        </div>
+      </main>
     </>
   );
 }

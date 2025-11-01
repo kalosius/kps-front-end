@@ -5,10 +5,14 @@ export default function ClassAttendance() {
 	return (
 		<>
 			<Navbar />
-			<div className="p-6">
-				<h1 className="text-2xl font-bold mb-4">Class Attendance</h1>
-				<p className="text-gray-600">This is the attendance page. Add attendance-taking UI here.</p>
-			</div>
+			<main className="content-area">
+				<div className="app-container">
+					<section className="site-card">
+						<h1 className="text-2xl font-bold">Class Attendance</h1>
+						<p className="mt-2 text-gray-600">This is the attendance page. Add attendance-taking UI here.</p>
+					</section>
+				</div>
+			</main>
 		</>
 	);
 }
