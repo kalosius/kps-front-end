@@ -85,6 +85,15 @@ button:focus-visible {
   box-shadow: 0 6px 18px rgba(15, 37, 69, 0.08);
 }
 
+/* Login specific layout tweaks */
+.login-grid { display: grid; grid-template-columns: 1fr 420px; gap: 1.25rem; align-items: stretch; }
+.login-left { padding: 0.5rem 0.25rem; }
+.login-right { padding: 0.5rem 0.25rem; }
+@media (max-width: 900px) {
+  .login-grid { grid-template-columns: 1fr; }
+  .site-card { padding: 1rem; }
+}
+
 /* Buttons */
 .btn-primary {
   background: linear-gradient(180deg,#2563eb,#0b63ff);
