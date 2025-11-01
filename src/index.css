@@ -85,6 +85,95 @@ button:focus-visible {
   box-shadow: 0 6px 18px rgba(15, 37, 69, 0.08);
 }
 
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(180deg,#2563eb,#0b63ff);
+  color: white;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+}
+.btn-primary:hover { filter: brightness(.98); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(15,23,42,0.06);
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  color: #0b2545; /* ensure visible label */
+  min-width: 64px;
+  text-align: center;
+}
+
+/* text-only blue action (used for Edit/Delete as requested) */
+.btn-text-blue {
+  background: transparent;
+  border: none;
+  color: #0b63ff;
+  padding: 0.25rem 0.4rem;
+  font-weight: 600;
+  min-width: 0;
+}
+.btn-text-blue:hover {
+  text-decoration: underline;
+}
+
+/* Tables */
+.table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.table-responsive { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+.table thead th { text-align: left; padding: 1rem 0.75rem; color: #475569; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em; text-transform: none; }
+.table thead th:first-child { padding-left: 1.25rem }
+.table thead th:last-child { padding-right: 1.25rem }
+.table tbody td { padding: 0.9rem 0.75rem; border-top: 1px solid rgba(15,23,42,0.04); vertical-align: middle; }
+.table tbody tr:hover { background: rgba(15,23,42,0.02); }
+.table tbody tr:nth-child(odd) { background: transparent; }
+.table tbody tr:nth-child(even) { background: rgba(15,23,42,0.01); }
+
+/* small avatar circle for name column */
+.avatar-initials {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#0b63ff,#2563eb);
+  color: white;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 700;
+}
+.name-cell { display:flex; align-items:center; gap:0.75rem }
+.name-cell .muted { margin-top: 2px }
+
+.action-cell { white-space: nowrap; text-align: right; min-width: 140px }
+
+/* Form inputs */
+.form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+.form-row { display:flex; flex-direction:column; }
+.form-input, .form-textarea, select {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(15,23,42,0.08);
+  background: #ffffff;
+  font-size: 1rem;
+  color: #0b2545;
+}
+.form-input:focus, .form-textarea:focus, select:focus { outline: none; box-shadow: 0 6px 18px rgba(11,99,255,0.08); border-color: rgba(11,99,255,0.15); }
+.form-textarea { min-height: 120px; resize: vertical; }
+.form-label { font-size: 0.9rem; color: #475569; margin-bottom: 0.35rem; font-weight:600 }
+.form-help { font-size: 0.85rem; color:#6b7280 }
+.muted { color: #6b7280; }
+.small { font-size: 0.9rem; }
+
+/* Ensure button text color for general buttons (fallback) */
+button, .btn-primary, .btn-ghost {
+  color: inherit;
+}
+
+/* specifically ensure primary text stays white */
+.btn-primary { color: #ffffff !important; }
+
 nav {
   display: flex;
   justify-content: space-between;
