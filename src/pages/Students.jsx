@@ -31,8 +31,11 @@ export default function Students() {
   };
 
   useEffect(() => {
+    // only fetch after we know the current user (ensures auth header is set)
+    if (!user) return;
     fetchStudents();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const openCreate = () => {
     setEditing(null);
@@ -121,8 +124,14 @@ export default function Students() {
                       <td className="small">{(s.current_class && (s.current_class.name || s.current_class)) || '-'}</td>
                       <td className="small">{s.is_active ? 'Yes' : 'No'}</td>
                         <td className="action-cell">
-                          <button onClick={() => openEdit(s)} className="btn-text-blue mr-2">Edit</button>
-                          <button onClick={() => handleDelete(s.id)} className="btn-text-blue">Delete</button>
+                          {(user?.role === 'admin' || user?.role === 'teacher') ? (
+                            <>
+                              <button onClick={() => openEdit(s)} className="btn-text-blue mr-2">Edit</button>
+                              <button onClick={() => handleDelete(s.id)} className="btn-text-blue">Delete</button>
+                            </>
+                          ) : (
+                            <span className="muted">(no actions)</span>
+                          )}
                         </td>
                     </tr>
                   ))}

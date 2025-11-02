@@ -132,6 +132,7 @@ export default function Navbar() {
         <div className="side-footer">
           <div className="user-info">
             <div className="user-name">{user?.first_name || user?.username || 'User'}</div>
+            <div style={{ fontSize: 12, color: '#6b7280' }}>{user?.role || (user?.is_superuser ? 'admin' : '')}</div>
             <button onClick={handleLogout} className="logout-btn">Logout</button>
           </div>
         </div>
