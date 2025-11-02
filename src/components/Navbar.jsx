@@ -56,6 +56,57 @@ export default function Navbar() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c1.657 0 3-1.567 3-3.5S13.657 1 12 1 9 2.567 9 4.5 10.343 8 12 8zM21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"/><path strokeLinecap="round" strokeLinejoin="round" d="M3 11h18"/></svg>
             <span>Grades</span>
           </NavLink>
+
+          {/* Admin-only links */}
+          {(user?.role === 'admin' || user?.is_superuser) && (
+            <>
+              <div style={{ marginTop: '0.5rem', padding: '0 0.5rem', color: '#6b7280', fontSize: '0.85rem', fontWeight: 700 }}>Admin</div>
+              <NavLink to="/admin/users" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M16 11c1.657 0 3-1.567 3-3.5S17.657 4 16 4s-3 1.567-3 3.5S14.343 11 16 11zM8 11c1.657 0 3-1.567 3-3.5S9.657 4 8 4 5 5.567 5 7.5 6.343 11 8 11z"/><path d="M21 20a4 4 0 00-4-4H7a4 4 0 00-4 4"/></svg>
+                <span>Users</span>
+              </NavLink>
+              <NavLink to="/admin/academic-years" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+                <span>Academic years</span>
+              </NavLink>
+              <NavLink to="/admin/terms" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M7 8h10M7 12h10M7 16h10"/></svg>
+                <span>Terms</span>
+              </NavLink>
+              <NavLink to="/admin/classes" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M4 7h16v10H4z"/></svg>
+                <span>School classes</span>
+              </NavLink>
+              <NavLink to="/admin/subjects" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+                <span>Subjects</span>
+              </NavLink>
+              <NavLink to="/admin/assessments" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+                <span>Assessments</span>
+              </NavLink>
+              <NavLink to="/admin/behaviour" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+                <span>Behaviour incidents</span>
+              </NavLink>
+              <NavLink to="/admin/messages" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                <span>Messages</span>
+              </NavLink>
+              <NavLink to="/admin/threads" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                <span>Message threads</span>
+              </NavLink>
+              <NavLink to="/admin/notifications" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118.6 14H5.4c-.67 0-1.255.27-1.695.695L2.3 17H7"/></svg>
+                <span>Notifications</span>
+              </NavLink>
+              <NavLink to="/admin/reports" className="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M19 21H5a2 2 0 01-2-2V7a2 2 0 012-2h4l2-3h2l2 3h4a2 2 0 012 2v12a2 2 0 01-2 2z"/></svg>
+                <span>Term reports</span>
+              </NavLink>
+            </>
+          )}
         </nav>
 
         <div className="side-footer">

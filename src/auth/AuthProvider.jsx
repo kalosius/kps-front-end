@@ -18,6 +18,39 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  // If we have a token but the stored user is missing important flags (like is_staff), try to fetch fresh user from the API.
+  useEffect(() => {
+    let mounted = true;
+    const needsReload = token && (!user || typeof user.is_staff === 'undefined');
+    if (!needsReload) return;
+
+    const loadUser = async () => {
+      try {
+        // try common endpoints for current user
+        const endpoints = ['auth/me/', 'auth/user/', 'auth/profile/'];
+        for (const ep of endpoints) {
+          try {
+            const res = await api.get(ep);
+            if (!mounted) return;
+            const fetched = res.data;
+            if (fetched && typeof fetched === 'object') {
+              setUser(fetched);
+              localStorage.setItem('user', JSON.stringify(fetched));
+              return;
+            }
+          } catch (e) {
+            // ignore and try next
+          }
+        }
+      } catch (err) {
+        console.error('Failed to refresh user profile', err);
+      }
+    };
+
+    loadUser();
+    return () => { mounted = false; };
+  }, [token]);
+
   // 🔹 Login endpoint
   const login = async (username, password) => {
     try {
