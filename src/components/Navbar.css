@@ -1,0 +1,44 @@
+.upper-nav{
+	height:64px;
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	padding:0 20px;
+	border-bottom:1px solid rgba(15,23,42,0.04);
+	background:#fff;
+	gap:12px;
+}
+.topbar-left{display:flex;align-items:center;gap:12px;flex:0 0 auto}
+.hamburger-btn{font-size:20px;background:transparent;border:none;cursor:pointer;padding:6px}
+.brand-inline{display:flex;align-items:center;gap:12px}
+.brand-tile-small{width:40px;height:40px;border-radius:8px;background:#0b5fff;display:flex;align-items:center;justify-content:center}
+.brand-text-small .brand-title{font-weight:700}
+.brand-text-small .brand-sub{font-size:12px;color:#6b7280}
+.topbar-center{flex:1 1 auto;display:flex;justify-content:center;min-width:0}
+.topbar-search{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.03);padding:8px 14px;border-radius:12px;min-width:260px;max-width:720px;width:60%}
+.topbar-search .search-icon{flex:0 0 16px}
+.search-input{border:none;outline:none;background:transparent;width:100%;font-size:14px}
+.topbar-right{display:flex;align-items:center;gap:12px;flex:0 0 auto}
+.action-buttons{display:flex;align-items:center;gap:8px;margin-right:4px}
+.btn{font-size:14px;padding:8px 12px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.btn-primary{background:#16a34a;color:#fff;border-color:#16a34a}
+.btn-outline{background:transparent;color:#0b5fff;border-color:rgba(11,95,255,0.12);border:1px solid rgba(11,95,255,0.12)}
+.icons-inline{display:flex;align-items:center;gap:10px}
+.icon-btn{background:transparent;border:none;cursor:pointer;font-size:16px;padding:6px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px}
+
+/* Notifications bell */
+.notifications-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:transparent;border:none;padding:6px;cursor:pointer}
+.notifications-bell svg{width:20px;height:20px;color:rgba(15,23,42,0.7)}
+.notifications-bell .badge{position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;font-size:12px;line-height:1;min-width:18px;height:18px;padding:0 6px;border-radius:9999px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.12)}
+
+/* small dark square seen in screenshot */
+/* dark square removed */
+.profile-wrap{position:relative}
+.profile-btn{display:flex;align-items:center;gap:8px;background:transparent;border:none;cursor:pointer;padding:6px}
+.avatar-circle{width:40px;height:40px;border-radius:20px;background:#e6eefc;display:flex;align-items:center;justify-content:center}
+.profile-info{display:flex;flex-direction:column;text-align:left}
+.profile-name{font-weight:700}
+.profile-email{font-size:12px;color:#6b7280}
+.profile-popover{position:absolute;right:0;top:54px;background:#fff;border:1px solid #eef2f7;border-radius:8px;padding:8px;min-width:160px;box-shadow:0 6px 18px rgba(15,23,42,0.08)}
+.popover-logout{width:100%;text-align:left;padding:8px 10px;background:transparent;border:none;cursor:pointer}
+@media (max-width: 767px){.upper-nav{display:none}.mobile-topbar{display:flex}}

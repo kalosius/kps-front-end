@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthProvider';
 import NotificationsBell from './NotificationsBell';
+import './Navbar.css';
 
 export default function Navbar() {
   const { logout, user } = useContext(AuthContext);
@@ -14,6 +15,17 @@ export default function Navbar() {
     logout();
     navigate('/');
   };
+
+  // profile dropdown for topbar
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
+  useEffect(() => {
+    const onDoc = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
+    };
+    document.addEventListener('click', onDoc);
+    return () => document.removeEventListener('click', onDoc);
+  }, []);
 
   return (
     <>
@@ -137,6 +149,71 @@ export default function Navbar() {
           </div>
         </div>
       </aside>
+
+      {/* top navigation shown on medium+ screens */}
+      <header className="topbar hidden md:flex upper-nav">
+        <div className="topbar-left">
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle sidebar"
+            className="hamburger-btn"
+          >
+            ☰
+          </button>
+
+          <div className="brand-inline">
+            <div className="brand-tile-small">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5}><path d="M3 13h4V7H3v6zM3 5h4V3H3v2zM9 13h8V3H9v10zM9 17h8v-2H9v2z"/></svg>
+            </div>
+            <div className="brand-text-small">
+              <div className="brand-title">KPS School</div>
+              <div className="brand-sub">Learner management</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="topbar-center">
+          <div className="topbar-search">
+            <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth={1.5}><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="6"/></svg>
+            <input aria-label="Search" placeholder="Search task" className="search-input" />
+          </div>
+        </div>
+
+        <div className="topbar-right">
+          <div className="action-buttons">
+            <button className="btn btn-primary">+ Add Project</button>
+            <button className="btn btn-outline">Import Data</button>
+          </div>
+
+          <div className="icons-inline">
+            {/* mail icon */}
+            <button className="icon-btn" aria-label="Messages">✉️</button>
+
+            {/* notifications bell (component renders badge) */}
+            <NotificationsBell />
+
+            {/* small dark square removed (cleaner layout) */}
+          </div>
+
+          <div ref={profileRef} className="profile-wrap">
+            <button onClick={() => setProfileOpen((s) => !s)} className="profile-btn">
+              <div className="avatar-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b5fff" strokeWidth={1.2}><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/></svg>
+              </div>
+              <div className="profile-info">
+                <div className="profile-name">{user?.first_name || user?.username || 'admin'}</div>
+                <div className="profile-email">{user?.email || (user?.role ?? (user?.is_superuser ? 'admin' : ''))}</div>
+              </div>
+            </button>
+
+            {profileOpen && (
+              <div className="profile-popover">
+                <button onClick={handleLogout} className="popover-logout">Logout</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
 
       {/* mobile top bar with hamburger */}
       <div className="mobile-topbar md:hidden">
