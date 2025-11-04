@@ -22,12 +22,18 @@ export default function Navbar() {
   // profile dropdown for topbar
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
+  const hoverTimeout = useRef(null);
   useEffect(() => {
     const onDoc = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
     };
     document.addEventListener('click', onDoc);
     return () => document.removeEventListener('click', onDoc);
+  }, []);
+
+  // clear any pending hover timeout on unmount
+  useEffect(() => {
+    return () => { if (hoverTimeout.current) clearTimeout(hoverTimeout.current); };
   }, []);
 
   return (
@@ -147,10 +153,17 @@ export default function Navbar() {
         </nav>
 
         <div className="side-footer">
-          <div className="user-info">
+            <div className="user-info">
             <div className="user-name">{user?.first_name || user?.username || 'User'}</div>
             <div style={{ fontSize: 12, color: '#6b7280' }}>{user?.role || (user?.is_superuser ? 'admin' : '')}</div>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
+            <button onClick={handleLogout} className="logout-btn" aria-label="Logout">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5} style={{ flex: '0 0 16px' }}>
+                <path d="M16 17l5-5-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M9 19H5a2 2 0 01-2-2V7a2 2 0 012-2h4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </aside>
@@ -200,8 +213,19 @@ export default function Navbar() {
             {/* small dark square removed (cleaner layout) */}
           </div>
 
-          <div ref={profileRef} className="profile-wrap">
-            <button onClick={() => setProfileOpen((s) => !s)} className="profile-btn">
+          <div
+            ref={profileRef}
+            className="profile-wrap"
+            onMouseEnter={() => {
+              if (hoverTimeout.current) { clearTimeout(hoverTimeout.current); hoverTimeout.current = null; }
+              setProfileOpen(true);
+            }}
+            onMouseLeave={() => {
+              // small delay so the user can move the mouse into the popover
+              hoverTimeout.current = setTimeout(() => setProfileOpen(false), 200);
+            }}
+          >
+            <button onClick={() => setProfileOpen((s) => !s)} className="profile-btn" aria-haspopup="true" aria-expanded={profileOpen}>
               <div className="avatar-circle">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b5fff" strokeWidth={1.2}><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/></svg>
               </div>
@@ -212,8 +236,21 @@ export default function Navbar() {
             </button>
 
             {profileOpen && (
-              <div className="profile-popover">
-                <button onClick={handleLogout} className="popover-logout">Logout</button>
+              <div className="profile-popover" onMouseEnter={() => { if (hoverTimeout.current) { clearTimeout(hoverTimeout.current); hoverTimeout.current = null; } }} onMouseLeave={() => { hoverTimeout.current = setTimeout(() => setProfileOpen(false), 200); }}>
+                <NavLink to="/profile" className="popover-item">
+                  <svg className="item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/></svg>
+                  <span className="item-text">Profile</span>
+                </NavLink>
+
+                <NavLink to="/settings" className="popover-item">
+                  <svg className="item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M12 15.5A3.5 3.5 0 1012 8.5a3.5 3.5 0 000 7z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V20a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06A2 2 0 015.27 17.4l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H4a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82L5.27 5.27A2 2 0 017.1 2.44l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V2a2 2 0 014 0v.09c.07.6.5 1.09 1 1.51h.02c.61.4 1.4.2 1.82-.33l.06-.06A2 2 0 0118.73 5.6l-.06.06c-.4.61-.2 1.4.33 1.82.44.29 1.02.38 1.51 1V11a2 2 0 010 4h-.09c-.5.97-1.08 1.3-1.51 1z"/></svg>
+                  <span className="item-text">Settings</span>
+                </NavLink>
+
+                <button onClick={handleLogout} className="popover-item popover-logout">
+                  <svg className="item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/><path d="M9 19H5a2 2 0 01-2-2V7a2 2 0 012-2h4"/></svg>
+                  <span className="item-text">Logout</span>
+                </button>
               </div>
             )}
           </div>

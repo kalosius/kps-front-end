@@ -26,6 +26,11 @@
 .icons-inline{display:flex;align-items:center;gap:10px}
 .icon-btn{background:transparent;border:none;cursor:pointer;font-size:16px;padding:6px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px}
 
+/* Sidenav logout button styling */
+.logout-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:#0b5fff;color:#fff;border:none;cursor:pointer;font-weight:700;width:100%;justify-content:center}
+.logout-btn svg{display:block}
+.logout-btn:hover{filter:brightness(0.95)}
+
 /* Notifications bell */
 .notifications-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:transparent;border:none;padding:6px;cursor:pointer}
 .notifications-bell svg{width:20px;height:20px;color:rgba(15,23,42,0.7)}
@@ -40,5 +45,9 @@
 .profile-name{font-weight:700}
 .profile-email{font-size:12px;color:#6b7280}
 .profile-popover{position:absolute;right:0;top:54px;background:#fff;border:1px solid #eef2f7;border-radius:8px;padding:8px;min-width:160px;box-shadow:0 6px 18px rgba(15,23,42,0.08)}
+.popover-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#0f172a;text-decoration:none;background:transparent;border:none;width:100%;box-sizing:border-box}
+.popover-item:hover{background:linear-gradient(90deg, rgba(11,95,255,0.04), rgba(11,95,255,0.02));}
+.popover-item .item-icon{flex:0 0 18px;color:rgba(15,23,42,0.6)}
+.popover-item .item-text{font-size:14px}
 .popover-logout{width:100%;text-align:left;padding:8px 10px;background:transparent;border:none;cursor:pointer}
 @media (max-width: 767px){.upper-nav{display:none}.mobile-topbar{display:flex}}
