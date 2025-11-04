@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../api/api';
+import { useMessages } from '../notifications/MessageProvider';
 
 export const AuthContext = createContext();
 
@@ -8,6 +9,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(
     localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
   );
+
+  // messaging
+  const messages = useContext ? useMessages() : null;
 
   // 🔹 Always attach or remove Authorization header
   useEffect(() => {
@@ -73,10 +77,14 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(userData));
       }
 
+      // show success message when available
+      try { messages?.addMessage && messages.addMessage('Login successful', 'success', 3500); } catch (e) {}
+
       // Return the parsed result so callers can react (e.g., navigate)
       return { access, user: userData };
     } catch (err) {
       console.error('Login failed:', err);
+      try { messages?.addMessage && messages.addMessage('Login failed', 'error', 5000); } catch (e) {}
       throw err;
     }
   };
@@ -85,11 +93,13 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       const res = await api.post('auth/register/', formData);
+      try { messages?.addMessage && messages.addMessage('Registration successful', 'success', 4500); } catch (e) {}
       // You could auto-login after registration if you want:
       // await login(formData.username, formData.password);
       return res.data;
     } catch (err) {
       console.error('Registration failed:', err);
+      try { messages?.addMessage && messages.addMessage('Registration failed', 'error', 5000); } catch (e) {}
       throw err;
     }
   };
@@ -101,6 +111,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('user');
     delete api.defaults.headers.common['Authorization'];
+    try { messages?.addMessage && messages.addMessage('Logged out', 'success', 2500); } catch (e) {}
   };
 
   return (

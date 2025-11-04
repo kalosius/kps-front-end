@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthProvider';
+import { MessageProvider } from './notifications/MessageProvider';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -25,8 +26,9 @@ import StudentProfile from './pages/StudentProfile';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <MessageProvider>
+      <AuthProvider>
+        <Router>
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
@@ -179,7 +181,8 @@ export default function App() {
           {/* Optional fallback: redirect to landing (login) */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+        </Router>
+      </AuthProvider>
+    </MessageProvider>
   );
 }
