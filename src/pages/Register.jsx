@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../auth/AuthProvider';
 import { useNavigate, Link } from 'react-router-dom';
+import bg from '../assets/schoolbackground.jpg';
+import logo from '../assets/Logo.png';
 
 export default function Register() {
   const { register } = useContext(AuthContext);
@@ -84,10 +86,10 @@ export default function Register() {
       `}</style>
 
       <div className="login-card site-card">
-        <div className="login-left">
+        <div className="login-left" style={{backgroundImage: `linear-gradient(180deg, rgba(14,165,165,0.92) 0%, rgba(6,182,212,0.85) 100%), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
           <div style={{display:'flex',alignItems:'center',gap:12}}>
             <div className="brand-tile" aria-hidden style={{width:44,height:44,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:8,background:'rgba(255,255,255,0.12)'}}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 4v16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <img src={logo} alt="KPS" style={{width:28,height:28,objectFit:'contain'}} />
             </div>
             <div>
               <div className="brand-title-large">KPS School</div>
