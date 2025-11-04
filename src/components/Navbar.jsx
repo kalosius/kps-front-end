@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthProvider';
 import NotificationsBell from './NotificationsBell';
+import Logo from '../assets/Logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -32,10 +33,10 @@ export default function Navbar() {
   return (
     <>
       <aside className={`side-nav ${open ? 'open' : ''}`} aria-hidden={!open && window.innerWidth < 768}>
-        <div className="side-brand" role="banner">
+          <div className="side-brand" role="banner">
           <div style={{display: 'flex', gap: '0.75rem', alignItems: 'center'}}>
             <div className="brand-tile">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5}><path d="M3 13h4V7H3v6zM3 5h4V3H3v2zM9 13h8V3H9v10zM9 17h8v-2H9v2z"/></svg>
+              <img src={Logo} alt="KPS logo" style={{ width: 36, height: 36, objectFit: 'contain' }} />
             </div>
             <div className="brand-text">
               <div className="brand-title">KPS School</div>
@@ -167,7 +168,7 @@ export default function Navbar() {
 
           <div className="brand-inline">
             <div className="brand-tile-small">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5}><path d="M3 13h4V7H3v6zM3 5h4V3H3v2zM9 13h8V3H9v10zM9 17h8v-2H9v2z"/></svg>
+              <img src={Logo} alt="KPS logo" style={{ width: 28, height: 28, objectFit: 'contain' }} />
             </div>
             <div className="brand-text-small">
               <div className="brand-title">KPS School</div>

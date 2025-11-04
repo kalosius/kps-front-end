@@ -21,6 +21,7 @@ import Messages from './pages/Messages';
 import MessageThreads from './pages/MessageThreads';
 import Notifications from './pages/Notifications';
 import TermReports from './pages/TermReports';
+import StudentProfile from './pages/StudentProfile';
 
 export default function App() {
   return (
@@ -49,6 +50,14 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Students />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/students/:id"
+            element={
+              <PrivateRoute>
+                <StudentProfile />
               </PrivateRoute>
             }
           />
