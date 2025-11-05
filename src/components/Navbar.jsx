@@ -2,11 +2,15 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthProvider';
 import NotificationsBell from './NotificationsBell';
+import api from '../api/api';
 import Logo from '../assets/Logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
-  const { logout, user } = useContext(AuthContext);
+  const { logout, user, token } = useContext(AuthContext);
+  // debug helper: log Navbar mount and token availability
+  // eslint-disable-next-line no-console
+  console.log('Navbar render, user, token:', user, token);
   const role = user?.role || (user?.is_superuser ? 'admin' : '');
   const isParent = role === 'parent';
   const navigate = useNavigate();
@@ -23,12 +27,84 @@ export default function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
   const hoverTimeout = useRef(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const fetchUnread = async () => {
+    try {
+      const res = await api.get('threads/unread_count/');
+      setUnreadCount(res.data?.unread || 0);
+    } catch (e) {
+      // ignore failures silently
+    }
+  };
   useEffect(() => {
     const onDoc = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
     };
     document.addEventListener('click', onDoc);
     return () => document.removeEventListener('click', onDoc);
+  }, []);
+
+  // connect to websocket for realtime unread updates when token available
+  useEffect(() => {
+    const disableWs = import.meta.env.VITE_DISABLE_WS === '1';
+    if (!token || disableWs) {
+      // fallback to polling when ws disabled or no token
+      fetchUnread();
+      const iv = setInterval(fetchUnread, 10000);
+      return () => clearInterval(iv);
+    }
+
+    let ws = null;
+    try {
+      const base = api.defaults.baseURL || 'http://localhost:8000/api/';
+      let wsBase = base.replace(/^http/, 'ws');
+      // remove trailing /api if present
+      wsBase = wsBase.replace(/\/api\/?$/, '');
+      const url = `${wsBase}/ws/notifications/?token=${encodeURIComponent(token)}`;
+      ws = new WebSocket(url);
+
+      ws.onopen = () => {
+        // fetch initial count
+        fetchUnread();
+      };
+
+      ws.onmessage = (ev) => {
+        try {
+          const data = JSON.parse(ev.data);
+          if (data?.type === 'unread_count') {
+            setUnreadCount(Number(data.unread || 0));
+          }
+        } catch (err) {
+          // ignore
+        }
+      };
+
+      ws.onclose = () => {
+        // clear socket reference
+        ws = null;
+      };
+    } catch (err) {
+      // if WS fails, fallback to polling
+      fetchUnread();
+      const iv = setInterval(fetchUnread, 10000);
+      return () => clearInterval(iv);
+    }
+
+    return () => {
+      try { if (ws) ws.close(); } catch (e) {}
+    };
+  }, [token]);
+
+  // listen for immediate updates to unread count via a window event
+  useEffect(() => {
+    const onUpdate = (e) => {
+      try {
+        const v = e?.detail?.unread;
+        if (typeof v === 'number') setUnreadCount(v);
+      } catch (err) {}
+    };
+    window.addEventListener('unreadCountUpdated', onUpdate);
+    return () => window.removeEventListener('unreadCountUpdated', onUpdate);
   }, []);
 
   // clear any pending hover timeout on unmount
@@ -204,8 +280,13 @@ export default function Navbar() {
           </div>
 
           <div className="icons-inline">
-            {/* mail icon */}
-            <button className="icon-btn" aria-label="Messages">✉️</button>
+            {/* mail icon - navigate to /messages and show unread badge */}
+            <button className="icon-btn" aria-label="Messages" onClick={() => navigate('/messages')} style={{ position: 'relative' }}>
+              ✉️
+              {unreadCount > 0 && (
+                <span style={{ position: 'absolute', top: -6, right: -6, background: '#ef4444', color: 'white', borderRadius: 999, minWidth: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, padding: '0 5px' }}>{unreadCount}</span>
+              )}
+            </button>
 
             {/* notifications bell (component renders badge) */}
             <NotificationsBell />
